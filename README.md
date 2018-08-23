@@ -5,7 +5,7 @@ This is the DPO PayGate PayWeb3 plugin for NopCommerce. Please feel free to cont
 
 ## Installation
 
-Please navigate to the [releases page](https://github.com/PayGate/PayWeb_NopCommerce/releases), download the latest release (v4.0.2) and unzip. You will them be able to follow the integration guide PDF which is included in the zip.
+Please navigate to the [releases page](https://github.com/PayGate/PayWeb_NopCommerce_4/releases), download the latest release (v4.0.2) and unzip. You will them be able to follow the integration guide PDF which is included in the zip.
 
 ## Collaboration
 
