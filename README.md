@@ -4,6 +4,7 @@
 This is the DPO PayGate PayWeb3 plugin for NopCommerce. Please feel free to contact the DPO PayGate support team at support@paygate.co.za should you require any assistance.
 
 ## Installation
+[![How To Setup DPO | PayGate PayWeb for NopCommerce 4](https://www.appinlet.com/wp-content/uploads/2018/09/NopCommerce-4-Integration.jpg)](http://www.youtube.com/watch?v=RfBpKRJi9HA "How To Setup DPO | PayGate PayWeb for NopCommerce 4")
 
 Please navigate to the [releases page](https://github.com/PayGate/PayWeb_NopCommerce_4/releases), download the latest release (v4.0.2) and unzip. You will them be able to follow the integration guide PDF which is included in the zip.
 
