@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <Copyright>Copyright © PayGate (Pty) Ltd</Copyright>
     <Company>PayGate (Pty) Ltd</Company>
     <Authors>App Inlet (Pty) Ltd</Authors>
-    <Version>4.00</Version>
+    <Version>4.10</Version>
     <Description>This plugin allows paying with PayWeb v3</Description>
     <PackageLicenseUrl>
     </PackageLicenseUrl>
