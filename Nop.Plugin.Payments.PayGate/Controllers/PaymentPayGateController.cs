@@ -13,7 +13,7 @@ using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Orders;
-using Nop.Services.Payments;
+using Nop.Services;
 using Nop.Services.Security;
 using Nop.Services.Stores;
 using Nop.Web.Framework;
@@ -28,6 +28,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
 
         private readonly IWorkContext _workContext;
         private readonly IStoreService _storeService;
+        private readonly IStoreContext storeContext;
         private readonly ISettingService _settingService;
         private readonly IOrderService _orderService;
         private readonly IOrderProcessingService _orderProcessingService;
@@ -67,9 +68,9 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
 
         public IActionResult PayGateNotifyHandler(IFormCollection form)
         {
-            _logger.Fatal("PayGateNotifyHandler start");
+            _logger.Error("PayGateNotifyHandler start");
             var id = Int32.Parse(Request.Query["pgnopcommerce"]);
-            _logger.Fatal(id.ToString());
+            _logger.Error(id.ToString());
             return RedirectToRoute("OrderDetails", new { orderId = id });
         }
 
@@ -238,6 +239,12 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
 
                 return RedirectToRoute("OrderDetails", new { orderId = order.Id.ToString().Trim() });
             }
+        }
+
+        private int GetActiveStoreScopeConfiguration(IStoreService storeService, IWorkContext workContext)
+        {
+            var storeId = Nop.Core.Infrastructure.EngineContext.Current.Resolve<Nop.Core.IStoreContext>().CurrentStore.Id;
+            return storeId;
         }
 
         [AuthorizeAdmin]

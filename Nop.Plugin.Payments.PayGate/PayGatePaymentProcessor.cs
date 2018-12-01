@@ -19,9 +19,7 @@ using Nop.Plugin.Payments.PayGate.Controllers;
 using Nop.Services.Configuration;
 using Nop.Services.Directory;
 using Nop.Services.Localization;
-using Nop.Services.Orders;
 using Nop.Services.Payments;
-using Nop.Services.Tax;
 using Nop.Web.Framework;
 
 namespace Nop.Plugin.Payments.PayGate
@@ -252,6 +250,15 @@ namespace Nop.Plugin.Payments.PayGate
         }
 
         /// <summary>
+        /// Gets a name of a view component for displaying plugin in public store ("payment info" checkout step)
+        /// </summary>
+        /// <returns>View component name</returns>
+        public string GetPublicViewComponentName()
+        {
+            return "PaymentPayGate";
+        }
+
+        /// <summary>
         /// Gets a route for provider configuration
         /// </summary>
         /// <param name="actionName">Action name</param>
@@ -302,19 +309,19 @@ namespace Nop.Plugin.Payments.PayGate
             _settingService.SaveSetting(settings);
 
             //locales
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.RedirectionTip", "You will be redirected to PayGate site to complete the order.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSandbox", "Use Sandbox");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSandbox.Hint", "Check to enable Sandbox (testing environment).");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.PayGateID", "PayGate ID");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.PayGateID.Hint", "Specify your PayGate ID.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EncryptionKey", "Encryption Key");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EncryptionKey.Hint", "Specify Encryption Key");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn", "Enable IPN (Instant Payment Notification)");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint", "Check if IPN is enabled.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint2", "Leave blank to use the default IPN handler URL.");
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.PaymentMethodDescription", "Pay by Credit/Debit Card");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.RedirectionTip", "You will be redirected to PayGate site to complete the order.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSandbox", "Use Sandbox");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSandbox.Hint", "Check to enable Sandbox (testing environment).");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.PayGateID", "PayGate ID");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.PayGateID.Hint", "Specify your PayGate ID.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EncryptionKey", "Encryption Key");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EncryptionKey.Hint", "Specify Encryption Key");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn", "Enable IPN (Instant Payment Notification)");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint", "Check if IPN is enabled.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint2", "Leave blank to use the default IPN handler URL.");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.PaymentMethodDescription", "Pay by Credit/Debit Card");
 
-            this.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Instructions", @"<p>
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Instructions", @"<p>
 
 <b>Open an Account:</b>
                 <br />
@@ -339,18 +346,18 @@ namespace Nop.Plugin.Payments.PayGate
             _settingService.DeleteSetting<PayGatePaymentSettings>();
 
             //locales
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.RedirectionTip");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSandbox");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSandbox.Hint");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.PayGateID");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.PayGateID.Hint");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EncryptionKey");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EncryptionKey.Hint");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint");
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint2");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.RedirectionTip");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSandbox");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSandbox.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.PayGateID");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.PayGateID.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EncryptionKey");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EncryptionKey.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint2");
 
-            this.DeletePluginLocaleResource("Plugins.Payments.PayGate.Instructions");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Instructions");
 
             base.Uninstall();
         }
