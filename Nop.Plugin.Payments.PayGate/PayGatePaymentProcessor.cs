@@ -94,7 +94,12 @@ namespace Nop.Plugin.Payments.PayGate
                 initiateData["REFERENCE"] = postProcessPaymentRequest.Order.Id.ToString();
                 initiateData["AMOUNT"] = (Convert.ToDouble(orderTotal) * 100).ToString();
                 initiateData["CURRENCY"] = _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId).CurrencyCode;
-                initiateData["RETURN_URL"] = _webHelper.GetStoreLocation(false) + "Plugins/PaymentPayGate/PayGateReturnHandler?pgnopcommerce=" + postProcessPaymentRequest.Order.Id.ToString();
+				var storeLocation = _webHelper.GetStoreLocation(false);
+                if (_payGatePaymentSettings.UseSSL)
+                {
+                    storeLocation = storeLocation.Replace("http://", "https://");
+                }
+                initiateData["RETURN_URL"] = storeLocation + "Plugins/PaymentPayGate/PayGateReturnHandler?pgnopcommerce=" + postProcessPaymentRequest.Order.Id.ToString();
                 initiateData["TRANSACTION_DATE"] = String.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now).ToString();
                 initiateData["LOCALE"] = "en-za";
                 initiateData["COUNTRY"] = postProcessPaymentRequest.Order.BillingAddress.Country.ThreeLetterIsoCode;
@@ -320,6 +325,8 @@ namespace Nop.Plugin.Payments.PayGate
             _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint", "Check if IPN is enabled.");
             _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint2", "Leave blank to use the default IPN handler URL.");
             _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.PaymentMethodDescription", "Pay by Credit/Debit Card");
+			_localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSSL", "Use SSL for Store");
+            _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSSL.Hint", "Enforce use of SSL for Store.");
 
             _localizationService.AddOrUpdatePluginLocaleResource("Plugins.Payments.PayGate.Instructions", @"<p>
 
@@ -356,6 +363,9 @@ namespace Nop.Plugin.Payments.PayGate
             _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn");
             _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint");
             _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.EnableIpn.Hint2");
+			_localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSSL");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSSL.Hint");
+            _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Fields.UseSSL.Hint2");
 
             _localizationService.DeletePluginLocaleResource("Plugins.Payments.PayGate.Instructions");
 
