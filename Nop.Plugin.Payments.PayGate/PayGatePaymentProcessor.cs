@@ -14,7 +14,7 @@ using Nop.Core;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
-using Nop.Core.Plugins;
+using Nop.Services.Plugins;
 using Nop.Plugin.Payments.PayGate.Controllers;
 using Nop.Services.Configuration;
 using Nop.Services.Directory;
@@ -310,6 +310,8 @@ namespace Nop.Plugin.Payments.PayGate
                 UseSandbox = true,
                 PayGateID = "10011072130",
                 EncryptionKey = "secret",
+                UseSSL = false,
+                EnableIpn = false
             };
             _settingService.SaveSetting(settings);
 
