@@ -8,6 +8,7 @@ namespace Nop.Plugin.Payments.PayGate
         public string PayGateID { get; set; }
         public string EncryptionKey { get; set; }
         public bool EnableIpn { get; set; }
-
+		public bool UseSSL { get; set; }
+		
     }
 }

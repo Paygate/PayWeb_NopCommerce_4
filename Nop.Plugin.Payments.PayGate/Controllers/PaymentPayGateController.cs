@@ -264,6 +264,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             model.EncryptionKey = payGatePaymentSettings.EncryptionKey;
             model.EnableIpn = payGatePaymentSettings.EnableIpn;
             model.ActiveStoreScopeConfiguration = storeScope;
+			model.UseSSL = payGatePaymentSettings.UseSSL;
 
             if (storeScope > 0)
             {
@@ -271,7 +272,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                 model.PayGateID_OverrideForStore = _settingService.SettingExists(payGatePaymentSettings, x => x.PayGateID, storeScope);
                 model.EncryptionKey_OverrideForStore = _settingService.SettingExists(payGatePaymentSettings, x => x.EncryptionKey, storeScope);
                 model.EnableIpn_OverrideForStore = _settingService.SettingExists(payGatePaymentSettings, x => x.EnableIpn, storeScope);
-
+				model.UseSSL_OverrideForStore = _settingService.SettingExists(payGatePaymentSettings, x => x.UseSSL, storeScope);
             }
 
             return View("~/Plugins/Payments.PayGate/Views/Configure.cshtml", model);
@@ -298,6 +299,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             payGatePaymentSettings.PayGateID = model.PayGateID;
             payGatePaymentSettings.EncryptionKey = model.EncryptionKey;
             payGatePaymentSettings.EnableIpn = model.EnableIpn;
+			payGatePaymentSettings.UseSSL = model.UseSSL;
 
             /* We do not clear cache after each setting update.
              * This behavior can increase performance because cached settings will not be cleared 
@@ -322,6 +324,11 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                 _settingService.SaveSetting(payGatePaymentSettings, x => x.EnableIpn, storeScope, false);
             else if (storeScope > 0)
                 _settingService.DeleteSetting(payGatePaymentSettings, x => x.EnableIpn, storeScope);
+			
+			if (model.UseSSL_OverrideForStore || storeScope == 0)
+                _settingService.SaveSetting(payGatePaymentSettings, x => x.UseSSL, storeScope, false);
+            else if (storeScope > 0)
+                _settingService.SaveSetting(payGatePaymentSettings, x => x.UseSSL, storeScope);
 
 
             //now clear settings cache

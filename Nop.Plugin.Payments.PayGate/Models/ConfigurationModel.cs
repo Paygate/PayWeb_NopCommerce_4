@@ -22,5 +22,9 @@ namespace Nop.Plugin.Payments.PayGate.Models
         [NopResourceDisplayName("Plugins.Payments.PayGate.Fields.EnableIpn")]
         public bool EnableIpn { get; set; }
         public bool EnableIpn_OverrideForStore { get; set; }
+		
+		[NopResourceDisplayName("Plugins.Payments.PayGate.Fields.UseSSL")]
+        public bool UseSSL { get; set; }
+        public bool UseSSL_OverrideForStore { get; set; }
     }
 }
