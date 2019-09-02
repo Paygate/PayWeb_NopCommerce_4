@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <Copyright>Copyright © PayGate (Pty) Ltd</Copyright>
     <Company>PayGate (Pty) Ltd</Company>
     <Authors>App Inlet (Pty) Ltd</Authors>

@@ -19,6 +19,7 @@ using Nop.Services.Stores;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
+using Nop.Services.Messages;
 
 namespace Nop.Plugin.Payments.PayGate.Controllers
 {
@@ -35,6 +36,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly PayGatePaymentSettings _payGatePaymentSettings;
         private readonly IPermissionService _permissionService;
+        private readonly INotificationService _notificationService;
         private ILogger _logger;
 
         #endregion
@@ -49,7 +51,8 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             ILocalizationService localizationService,
             IPermissionService permissionService,
             ILogger logger,
-            PayGatePaymentSettings payGatePaymentSettings)
+            PayGatePaymentSettings payGatePaymentSettings,
+            INotificationService notificationService)
         {
             this._workContext = workContext;
             this._storeService = storeService;
@@ -60,6 +63,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             this._permissionService = permissionService;
             this._payGatePaymentSettings = payGatePaymentSettings;
             this._logger = logger;
+            this._notificationService = notificationService;
         }
 
         #endregion
@@ -308,33 +312,32 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             if (model.UseSandbox_OverrideForStore || storeScope == 0)
                 _settingService.SaveSetting(payGatePaymentSettings, x => x.UseSandbox, storeScope, false);
             else if (storeScope > 0)
-                _settingService.DeleteSetting(payGatePaymentSettings, x => x.UseSandbox, storeScope);
+                _settingService.SaveSetting(payGatePaymentSettings, x => x.UseSandbox, storeScope);
 
             if (model.PayGateID_OverrideForStore || storeScope == 0)
                 _settingService.SaveSetting(payGatePaymentSettings, x => x.PayGateID, storeScope, false);
             else if (storeScope > 0)
-                _settingService.DeleteSetting(payGatePaymentSettings, x => x.PayGateID, storeScope);
+                _settingService.SaveSetting(payGatePaymentSettings, x => x.PayGateID, storeScope);
 
             if (model.EncryptionKey_OverrideForStore || storeScope == 0)
                 _settingService.SaveSetting(payGatePaymentSettings, x => x.EncryptionKey, storeScope, false);
             else if (storeScope > 0)
-                _settingService.DeleteSetting(payGatePaymentSettings, x => x.EncryptionKey, storeScope);
+                _settingService.SaveSetting(payGatePaymentSettings, x => x.EncryptionKey, storeScope);
 
             if (model.EnableIpn_OverrideForStore || storeScope == 0)
                 _settingService.SaveSetting(payGatePaymentSettings, x => x.EnableIpn, storeScope, false);
             else if (storeScope > 0)
-                _settingService.DeleteSetting(payGatePaymentSettings, x => x.EnableIpn, storeScope);
-			
-			if (model.UseSSL_OverrideForStore || storeScope == 0)
+                _settingService.SaveSetting(payGatePaymentSettings, x => x.EnableIpn, storeScope);
+
+            if (model.UseSSL_OverrideForStore || storeScope == 0)
                 _settingService.SaveSetting(payGatePaymentSettings, x => x.UseSSL, storeScope, false);
             else if (storeScope > 0)
                 _settingService.SaveSetting(payGatePaymentSettings, x => x.UseSSL, storeScope);
 
-
             //now clear settings cache
             _settingService.ClearCache();
 
-            SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }
