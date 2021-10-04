@@ -8,12 +8,12 @@
 @await Component.InvokeAsync("StoreScopeConfiguration")
 
 <form asp-controller="PaymentPayGate" asp-action="Configure" method="post">
-    <div class="panel-group">
-        <div class="panel panel-default">
-            <div class="panel-body">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-body">
                 @Html.Raw(T("Plugins.Payments.PayGate.Instructions"))
 
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="TestMode_OverrideForStore" asp-input="TestMode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="TestMode" />
@@ -23,7 +23,7 @@
                         <span asp-validation-for="TestMode"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="UseSSL_OverrideForStore" asp-input="UseSSL" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="UseSSL" />
@@ -33,7 +33,7 @@
                         <span asp-validation-for="UseSSL"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="PayGateID_OverrideForStore" asp-input="PayGateID" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="PayGateID" />
@@ -43,7 +43,7 @@
                         <span asp-validation-for="PayGateID"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="EncryptionKey_OverrideForStore" asp-input="EncryptionKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="EncryptionKey" />
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <h3>Enable one of the following methods. If neither is enabled, default will be "Redirect"</h3>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="EnableIpn_OverrideForStore" asp-input="EnableIpn" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="EnableIpn" />
@@ -64,7 +64,7 @@
                         <span asp-validation-for="EnableIpn"></span>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-3">
                         <nop-override-store-checkbox asp-for="EnableRedirect_OverrideForStore" asp-input="EnableRedirect" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
                         <nop-label asp-for="EnableRedirect" />
@@ -75,7 +75,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-md-9 col-md-offset-3">
                         <input type="submit" name="save" class="btn bg-primary" value="@T("Admin.Common.Save")" />
                     </div>

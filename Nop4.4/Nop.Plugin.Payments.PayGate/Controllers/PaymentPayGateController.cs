@@ -38,12 +38,14 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
         private readonly IPermissionService _permissionService;
         private ILogger _logger;
         private INotificationService _notificationService;
+        private IStoreContext _storeContext;
 
         #endregion
 
         #region Ctor
 
-        public PaymentPayGateController(IWorkContext workContext,
+        public PaymentPayGateController(
+            IWorkContext workContext,
             IStoreService storeService,
             ISettingService settingService,
             IOrderService orderService,
@@ -52,7 +54,9 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             IPermissionService permissionService,
             ILogger logger,
             PayGatePaymentSettings payGatePaymentSettings,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IStoreContext storeContext
+            )
         {
             this._workContext = workContext;
             this._storeService = storeService;
@@ -64,6 +68,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             this._payGatePaymentSettings = payGatePaymentSettings;
             this._logger = logger;
             this._notificationService = notificationService;
+            this._storeContext = storeContext;
         }
 
         #endregion
@@ -84,7 +89,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             await _logger.InformationAsync("PayGateNotifyHandler start. Order no.: " + reference);
 
             //Order order = _orderService.GetOrderById(Int32.Parse(Request.Query["pgnopcommerce"]));
-            Order order = await _orderService.GetOrderByIdAsync(Int32.Parse(Request.Form["USER1"]));
+            Order order = await _orderService.GetOrderByIdAsync(Int32.Parse(reference));
 
             int orderId = 0;
             if (order != null)
@@ -114,21 +119,23 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                 //Validate checksum for the posted form fields
                 var formData = new NameValueCollection();
                 var formDataJS = "";
-                string[] keys = Request.Form.Keys.ToArray();
-                for (int i = 0; i < keys.Length; i++)
-                {
-                    formData[keys[i]] = Request.Form[keys[i]];
-                    formDataJS += keys[i] + "=" + formData[keys[i]] + "&";
-                }
+                var checkstring = "";
 
+                foreach(var entry in form)
+                {
+                    var key = entry.Key;
+                    var val = entry.Value;
+                    formData[key] = val;
+                    if (key != "CHECKSUM")
+                    {
+                        checkstring += val;
+                        formDataJS += key + "=" + val + "&";
+                    }
+                }
+                
                 await _logger.InformationAsync("PayGateNotifyHandler: POST: " + formDataJS);
 
                 var checksum = formData["CHECKSUM"];
-                var checkstring = "";
-                for (var i = 0; i < formData.Count - 1; i++)
-                {
-                    checkstring += formData[i];
-                }
                 checkstring += encryptionKey;
 
                 var ourChecksum = new PayGateHelper().CalculateMD5Hash(checkstring);
@@ -414,7 +421,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                         }
                         await _orderService.UpdateOrderAsync(order);
                         await _logger.InformationAsync("PayGateReturnHandler: Order marked paid");
-                        return (IActionResult)Task.FromResult(RedirectToRoute("CheckoutCompleted", new { orderId = order.Id }));
+                        return RedirectToRoute("CheckoutCompleted", new { orderId = order.Id });
                     }
                     else
                     {
@@ -469,8 +476,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                 return AccessDeniedView();
 
             //load settings for a chosen store scope
-            var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
-            var payGatePaymentSettings = await _settingService.LoadSettingAsync<PayGatePaymentSettings>(storeScope);
+            var storeScope = await _storeContext.GetActiveStoreScopeConfigurationAsync(); var payGatePaymentSettings = await _settingService.LoadSettingAsync<PayGatePaymentSettings>(storeScope);
 
             var model = new ConfigurationModel();
             model.TestMode = payGatePaymentSettings.TestMode;
@@ -506,7 +512,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                 return await Configure();
 
             //load settings for a chosen store scope
-            var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
+            var storeScope = await _storeContext.GetActiveStoreScopeConfigurationAsync();
             var payGatePaymentSettings = await _settingService.LoadSettingAsync<PayGatePaymentSettings>(storeScope);
 
             //save settings
@@ -520,38 +526,18 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
             /* We do not clear cache after each setting update.
              * This behavior can increase performance because cached settings will not be cleared 
              * and loaded from database after each update */
-
-            await _settingService.ClearCacheAsync();
-
-            if (model.TestMode_OverrideForStore || storeScope == 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.TestMode, storeScope, false);
-            else if (storeScope > 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.TestMode, storeScope);
-
-            if (model.PayGateID_OverrideForStore || storeScope == 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.PayGateID, storeScope, false);
-            else if (storeScope > 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.PayGateID, storeScope);
-
-            if (model.EncryptionKey_OverrideForStore || storeScope == 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.EncryptionKey, storeScope, false);
-            else if (storeScope > 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.EncryptionKey, storeScope);
-
-            if (model.EnableIpn_OverrideForStore || storeScope == 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.EnableIpn, storeScope, false);
-            else if (storeScope > 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.EnableIpn, storeScope);
-
-            if (model.EnableRedirect_OverrideForStore || storeScope == 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.EnableRedirect, storeScope, false);
-            else if (storeScope > 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.EnableRedirect, storeScope);
-
-            if (model.UseSSL_OverrideForStore || storeScope == 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.UseSSL, storeScope, false);
-            else if (storeScope > 0)
-                await _settingService.SaveSettingAsync(payGatePaymentSettings, x => x.UseSSL, storeScope);
+            await _settingService.SaveSettingOverridablePerStoreAsync
+                (payGatePaymentSettings, x => x.TestMode, model.TestMode_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync
+                 (payGatePaymentSettings, x => x.PayGateID, model.PayGateID_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync
+                 (payGatePaymentSettings, x => x.EncryptionKey, model.EncryptionKey_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync
+                 (payGatePaymentSettings, x => x.EnableIpn, model.EnableIpn_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync
+                 (payGatePaymentSettings, x => x.EnableRedirect, model.EnableRedirect_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync
+                 (payGatePaymentSettings, x => x.UseSSL, model.UseSSL_OverrideForStore, storeScope, false);
 
             //now clear settings cache
             await _settingService.ClearCacheAsync();
