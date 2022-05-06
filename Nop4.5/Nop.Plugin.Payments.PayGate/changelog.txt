@@ -1,0 +1,6 @@
+=====================================
+Date	  : Version: Description
+=====================================
+
+2022-05-06: v4.5.0 : Change to .NET6 and support for NopCommerce 4.5.
+		     Change deprecated WebClient to HTTPClient.
