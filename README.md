@@ -1,5 +1,5 @@
 # PayWeb_NopCommerce_4
-## PayGate PayWeb3 NopCommerce plugin v4.5.0 for NopCommerce v4.50
+## PayGate PayWeb3 NopCommerce plugin v4.5.1 for NopCommerce v4.50
 
 This is the PayGate PayWeb3 plugin for NopCommerce. Please feel free to contact the PayGate support team at supportsa@dpogroup.com should you require any assistance.
 

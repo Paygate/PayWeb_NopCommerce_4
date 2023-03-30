@@ -120,8 +120,8 @@ namespace Nop.Plugin.Payments.PayGate
                     initiateData["PAYGATE_ID"] = _payGatePaymentSettings.PayGateID;
                     encryptionKey = _payGatePaymentSettings.EncryptionKey;
                 }
-                initiateData["REFERENCE"] = postProcessPaymentRequest.Order.Id.ToString();
-                initiateData["AMOUNT"] = (Convert.ToDouble(orderTotal) * 100).ToString();
+                initiateData["REFERENCE"] = postProcessPaymentRequest.Order.CustomOrderNumber.ToString();
+                initiateData["AMOUNT"] = Convert.ToInt16(Convert.ToDouble(orderTotal) * 100).ToString();
                 initiateData["CURRENCY"] = (await _currencyService.GetCurrencyByIdAsync(_currencySettings.PrimaryStoreCurrencyId)).CurrencyCode;
                 
                 var storeLocation = _webHelper.GetStoreLocation(false);
@@ -157,7 +157,7 @@ namespace Nop.Plugin.Payments.PayGate
                 initiateData["EMAIL"] = billingEmail;
                 if (_payGatePaymentSettings.EnableIpn)
                 {
-                    initiateData["NOTIFY_URL"] = _webHelper.GetStoreLocation(false) + "Plugins/PaymentPayGate/PayGateNotifyHandler?pgnopcommerce=" + postProcessPaymentRequest.Order.Id.ToString();
+                    initiateData["NOTIFY_URL"] = storeLocation + "Plugins/PaymentPayGate/PayGateNotifyHandler?pgnopcommerce=" + postProcessPaymentRequest.Order.Id.ToString();
                 }
                 initiateData["USER1"] = postProcessPaymentRequest.Order.Id.ToString();
                 initiateData["USER3"] = "nopcommerce-v4.4.0";
