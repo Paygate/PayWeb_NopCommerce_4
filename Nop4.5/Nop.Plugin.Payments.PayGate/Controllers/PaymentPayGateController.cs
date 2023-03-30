@@ -76,7 +76,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
         #region Methods
 
         //public IActionResult PayGateNotifyHandler(IFormCollection form)
-        public async void PayGateNotifyHandler(IFormCollection form)
+        public async Task PayGateNotifyHandler(IFormCollection form)
         {
             /**
              * Enable IPN if it is set
@@ -212,7 +212,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                         note.OrderId = orderId;
                         note.CreatedOnUtc = DateTime.Now;
                         note.DisplayToCustomer = true;
-                        note.Note = "Payment failed with the following description: " + transactionStatus;
+                        note.Note = "Payment failed with the following description: " + query_status_desc;
                         if (_orderProcessingService.CanCancelOrder(order))
                         {
                             await _orderProcessingService.CancelOrderAsync(order, false);
@@ -274,8 +274,37 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                 var transactionStatus = formData["TRANSACTION_STATUS"];
                 var payrequestId = formData["PAY_REQUEST_ID"];
                 var checksum = formData["CHECKSUM"];
+                var query_status = PaymentStatus.Pending;
 
-                var checkstring = paygateId + payrequestId + transactionStatus + reference + encryptionKey;
+                String trans_status = formData["TRANSACTION_STATUS"];
+                String query_status_desc = "";
+                switch (trans_status)
+                {
+                    case "1":
+                        query_status = PaymentStatus.Paid;
+                        query_status_desc = "Approved";
+                        break;
+
+                    case "2":
+                        query_status = PaymentStatus.Voided;
+                        query_status_desc = "Declined";
+                        break;
+
+                    case "4":
+                        query_status = PaymentStatus.Voided;
+                        query_status_desc = "Cancelled By Customer with back button on payment page";
+                        break;
+
+                    case "0":
+                        query_status = PaymentStatus.Voided;
+                        query_status_desc = "Not Done";
+                        break;
+                    default:
+                        break;
+                }
+
+
+                var checkstring = paygateId + payrequestId + transactionStatus + order.CustomOrderNumber + encryptionKey;
                 var ourChecksum = new PayGateHelper().CalculateMD5Hash(checkstring);
                 if (ourChecksum.Equals(checksum, StringComparison.OrdinalIgnoreCase))
                 {
@@ -294,15 +323,14 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
 
                 if (verified)
                 {
-                    var sBuilder = new StringBuilder();
-                    var query_status = PaymentStatus.Pending;
+                    var sBuilder = new StringBuilder();                    
 
                     using (var client = new System.Net.WebClient())
                     {
                         var queryData = new NameValueCollection();
                         queryData["PAYGATE_ID"] = paygateId;
                         queryData["PAY_REQUEST_ID"] = payrequestId;
-                        queryData["REFERENCE"] = reference;
+                        queryData["REFERENCE"] = order.CustomOrderNumber;
                         string queryValues = string.Join("", queryData.AllKeys.Select(key => queryData[key]));
                         queryData["CHECKSUM"] = new PayGateHelper().CalculateMD5Hash(queryValues + _payGatePaymentSettings.EncryptionKey);
                         var cnt = 0;
@@ -337,33 +365,6 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                         {
                             try
                             {
-                                String trans_status = dict["TRANSACTION_STATUS"].ToString();
-                                String query_status_desc = "";
-                                switch (trans_status)
-                                {
-                                    case "1":
-                                        query_status = PaymentStatus.Paid;
-                                        query_status_desc = "Approved";
-                                        break;
-
-                                    case "2":
-                                        query_status = PaymentStatus.Voided;
-                                        query_status_desc = "Declined";
-                                        break;
-
-                                    case "4":
-                                        query_status = PaymentStatus.Voided;
-                                        query_status_desc = "Cancelled By Customer with back button on payment page";
-                                        break;
-
-                                    case "0":
-                                        query_status = PaymentStatus.Voided;
-                                        query_status_desc = "Not Done";
-                                        break;
-                                    default:
-                                        break;
-                                }
-
                                 sBuilder.AppendLine("PayGate Return Handler");
                                 sBuilder.AppendLine("PayGate Query Data");
                                 sBuilder.AppendLine("=======================");
@@ -389,7 +390,7 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                             sBuilder.AppendLine("PayGate Return Data");
                             sBuilder.AppendLine("=======================");
                             sBuilder.AppendLine("PayGate PayRequestId: " + payrequestId);
-                            sBuilder.AppendLine("PayGate Status Desc: " + transactionStatus);
+                            sBuilder.AppendLine("PayGate Status Desc: " + query_status_desc);
                             sBuilder.AppendLine("PayGate Query Desc: Failed to get a response from the query");
                         }
                     }
@@ -430,8 +431,8 @@ namespace Nop.Plugin.Payments.PayGate.Controllers
                         note.OrderId = orderId;
                         note.CreatedOnUtc = DateTime.Now;
                         note.DisplayToCustomer = true;
-                        note.Note = "Payment failed with the following description: " + transactionStatus;
-                        await _logger.ErrorAsync("PayGateReturnHandler: Payment failed with the following description: " + transactionStatus);
+                        note.Note = "Payment failed with the following description: " + query_status_desc;
+                        await _logger.ErrorAsync("PayGateReturnHandler: Payment failed with the following description: " + query_status_desc);
                         if (_orderProcessingService.CanCancelOrder(order))
                         {
                             await _orderProcessingService.CancelOrderAsync(order, false);
