@@ -1,0 +1,184 @@
+﻿@{
+    Layout = "";
+}
+@model Nop.Plugin.Payments.PayGate.Models.PaymentInfoModel
+<table width="100%" cellpadding="1" cellspacing="2">
+    <tr>
+        <td>
+            <p><b>@T("Plugins.Payments.PayGate.Fields.RedirectionTip")</b></p>
+        </td>
+    </tr>
+    @if (Model.payGatePaymentSettings.EnableCreditCard)
+    {
+        <tr id="creditcard473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseCreditCard" value="UseCreditCard" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseCreditCard">Use Credit Card</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/mastercard-visa.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableBankTransfer)
+    {
+        <tr id="banktransfer473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseBankTransfer" value="UseBankTransfer" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseBankTransfer">Use Bank Transfer</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/sid.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableZapper)
+    {
+        <tr id="zapper473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseZapper" value="UseZapper" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseZapper">Use Zapper</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/zapper.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableSnapscan)
+    {
+        <tr id="snapscan473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseSnapscan" value="UseSnapscan" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseSnapscan">Use SnapScan</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/snapscan.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnablePaypal)
+    {
+        <tr id="paypal473">
+            <td>
+                <input type="radio" name="pay-methods" id="UsePaypal" value="UsePaypal" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UsePaypal">Use PayPal</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/paypal.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableMobicred)
+    {
+        <tr id="mobicred473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseMobicred" value="UseMobicred" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseMobicred">Use Mobicred</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/mobicred.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableMomoPay)
+    {
+        <tr id="momopay473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseMomoPay" value="UseMomoPay" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseMomoPay">Use Momopay</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/momopay.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableScanToPay)
+    {
+        <tr id="scantopay473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseScanToPay" value="UseScanToPay" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseScanToPay">Use MasterPass</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/scan-to-pay.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableSamsungPay)
+    {
+        <tr id="samsungpay473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseSamsungPay" value="UseSamsungPay" />
+            </td>
+            <td>
+                <div class="row" style="width: 215px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseSamsungPay">Use Samsung Pay</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/samsung-pay.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableApplePay)
+    {
+        <tr id="applepay473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseApplePay" value="UseApplePay" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseApplePay">Use ApplePay</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/apple-pay.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (Model.payGatePaymentSettings.EnableRcsPay)
+    {
+        <tr id="rcspay473">
+            <td>
+                <input type="radio" name="pay-methods" id="UseRcsPay" value="UseRcsPay" />
+            </td>
+            <td>
+                <div class="row" style="width: 210px; justify-content: space-between; display: flex !important;">
+                    <label asp-for="UseRcsPay">Use RCS Payments</label>
+                    <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/rcs.svg")" height="16">
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+
+<script>
+    $(document).ready(function () {
+        if (!window.ApplePaySession) {
+            // The Apple Pay JS API is not available.
+            $('#applepay473').remove();
+        }
+    });
+</script>

@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "Paygate",
+  "SystemName": "Payments.PayGate",
+  "Version": "4.6.0",
+  "SupportedVersions": [ "4.60" ],
+  "Author": "App Inlet (Pty) Ltd",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.PayGate.dll",
+  "Description": "This plugin allows paying with Paygate PayWeb3"
+}

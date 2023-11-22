@@ -1,0 +1,6 @@
+=====================================
+Date	  : Version: Description
+=====================================
+
+2023-11-21: v4.6.0 : Add support for NopCommerce 4.60 and .NET7.
+                     Implement Payment types feature.

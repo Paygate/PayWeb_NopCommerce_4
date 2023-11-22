@@ -1,0 +1,218 @@
+﻿@model Nop.Plugin.Payments.PayGate.Models.ConfigurationModel
+@inject Nop.Core.IWebHelper webHelper
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+@await Component.InvokeAsync("StoreScopeConfiguration")
+
+<form asp-controller="PaymentPayGate" asp-action="Configure" method="post">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-body">
+                @Html.Raw(T("Plugins.Payments.PayGate.Instructions"))
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="TestMode_OverrideForStore" asp-input="TestMode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="TestMode" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="TestMode" />
+                        <span asp-validation-for="TestMode"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="UseSSL_OverrideForStore" asp-input="UseSSL" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="UseSSL" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UseSSL" />
+                        <span asp-validation-for="UseSSL"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="PayGateID_OverrideForStore" asp-input="PayGateID" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="PayGateID" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="PayGateID" />
+                        <span asp-validation-for="PayGateID"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EncryptionKey_OverrideForStore" asp-input="EncryptionKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EncryptionKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EncryptionKey" />
+                        <span asp-validation-for="EncryptionKey"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="DisableIpn_OverrideForStore" asp-input="DisableIpn" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="DisableIpn" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="DisableIpn" />
+                        <span asp-validation-for="DisableIpn"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableCreditCard_OverrideForStore" asp-input="EnableCreditCard" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableCreditCard" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableCreditCard" />
+                            <span asp-validation-for="EnableCreditCard"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/mastercard-visa.svg")"
+                                 alt="CreditCard" height="16" style="float:inline-end">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableBankTransfer_OverrideForStore" asp-input="EnableBankTransfer" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableBankTransfer" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableBankTransfer" />
+                            <span asp-validation-for="EnableBankTransfer"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/sid.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableZapper_OverrideForStore" asp-input="EnableZapper" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableZapper" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableZapper" />
+                            <span asp-validation-for="EnableZapper"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/zapper.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableSnapscan_OverrideForStore" asp-input="EnableSnapscan" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableSnapscan" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableSnapscan" />
+                            <span asp-validation-for="EnableSnapscan"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/snapscan.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnablePaypal_OverrideForStore" asp-input="EnablePaypal" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnablePaypal" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnablePaypal" />
+                            <span asp-validation-for="EnablePaypal"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/paypal.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableMobicred_OverrideForStore" asp-input="EnableMobicred" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableMobicred" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableMobicred" />
+                            <span asp-validation-for="EnableMobicred"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/mobicred.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableMomoPay_OverrideForStore" asp-input="EnableMomoPay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableMomoPay" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableMomoPay" />
+                            <span asp-validation-for="EnableMomoPay"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/momopay.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableScanToPay_OverrideForStore" asp-input="EnableScanToPay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableScanToPay" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableScanToPay" />
+                            <span asp-validation-for="EnableScanToPay"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/scan-to-pay.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableSamsungPay_OverrideForStore" asp-input="EnableSamsungPay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableSamsungPay" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:135px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableSamsungPay" />
+                            <span asp-validation-for="EnableSamsungPay"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/samsung-pay.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableApplePay_OverrideForStore" asp-input="EnableApplePay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableApplePay" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableApplePay" />
+                            <span asp-validation-for="EnableApplePay"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/apple-pay.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="EnableRcsPay_OverrideForStore" asp-input="EnableRcsPay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="EnableRcsPay" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row" style="width:130px; align-items: baseline; justify-content: space-between; padding: 0 7.5px">
+                            <nop-editor asp-for="EnableRcsPay" />
+                            <span asp-validation-for="EnableRcsPay"></span>
+                            <img src="@Url.Content("~/Plugins/Payments.PayGate/Content/rcs.svg")" height="16">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-9 col-md-offset-3">
+                        <input type="submit" name="save" class="btn bg-primary" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
